@@ -87,20 +87,20 @@ WSGI_APPLICATION = 'iqa_web.wsgi.application'
 DATABASES = {
    'default': {
 
-       #'ENGINE': 'django.db.backends.sqlite3',
+       'ENGINE': 'django.db.backends.sqlite3',
        #'NAME': os.path.join(BASE_DIR, 'db.sqlite3.4'),
 
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+    #'ENGINE': 'django.db.backends.postgresql_psycopg2',
     #    'NAME': 'de235c0eh81fbj', 
     #    'USER':'rmgzwpkekkxesd',
     #    'PASSWORD':'82de29e44fe3de7db04e31599759efc3f423402cde386781c76a194f865fab3f',
     #    'HOST':'ec2-54-247-72-30.eu-west-1.compute.amazonaws.com',
     #    'PORT':5432
         'NAME' : 'iqadb',
-        'USER' : 'root',
-        'PASSWORD' : 'iqaadmin',
-        'HOST' : 'localhost',
-        'PORT' : '22',
+      #  'USER' : 'root',
+      #  'PASSWORD' : 'iqaadmin',
+      #  'HOST' : 'localhost',
+       # 'PORT' : '22',
    }
 }
 
