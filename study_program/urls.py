@@ -54,7 +54,6 @@ urlpatterns = [
     path('aun/edit/<int:aun_id>', views.edit_aun, name = "edit_aun"),
     path('committee/edit/<int:committee_id>', views.edit_committee_profile, name = "edit_committee_profile"),
     path('faculty/committee_appointment/edit_date_time/<int:available_time_id>', views.edit_committee_appointment, name = 'edit_committee_appointment'),
-    path('faculty_study_program/edit/<int:program_id>', views.edit_faculty_study_program, name="edit_faculty_study_program"),
       
 
     # create form
@@ -110,9 +109,6 @@ urlpatterns = [
     path('assessment/aun/export/csv', views.export_aun_csv, name = 'export_aun_csv'),
     path('committee/export/csv', views.export_committee_csv, name = 'export_committee_csv'),
     path('committee_recommendation/export/csv', views.export_committee_recommendation_csv, name = 'export_committee_recommendation_csv'),
-
-    # FAQ
-    path('faq/', views.faq, name = 'faq'),
 ]  
 
 

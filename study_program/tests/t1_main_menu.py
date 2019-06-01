@@ -16,8 +16,6 @@ from selenium import webdriver
 
 class TestCase1MainMenu(unittest.TestCase):
     def setUp(self):
-        print()
-        print("test case 1: main menu ")
         chromedriver = "./chromedriver"
         self.driver = webdriver.Chrome(chromedriver)
         self.driver.implicitly_wait(30)
@@ -86,4 +84,3 @@ class TestCase1MainMenu(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
-    

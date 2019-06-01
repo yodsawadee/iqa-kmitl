@@ -499,32 +499,12 @@
 import sys
 sys.path.append('C:\\iqa_website_test\\IQA-Website-for-KMITL-master\\myvenv\\Scripts\\iqa_web\\study_program\\tests\\')
 print(sys.path)
-from t1_main_menu import TestCase1MainMenu
-from t2_1_create_study_program import TestCase2CreateStudyProgram
-from t2_2_edit_study_program import TestCase2EditStudyProgram
+# from t1_main_menu import TestCase1MainMenu
+# from t2_1_create_study_program import TestCase2CreateStudyProgram
+# from t2_2_edit_study_program import TestCase2EditStudyProgram
 # from t2_3_filter_study_program import TestCase2FilterStudyProgram
-from t3_1_create_professor import TestCase3CreateProfessor
-from t3_2_edit_professor import TestCase3EditProfessor
-from t4_1_create_committee import TestCase4CreateCommittee
-from t4_2_edit_committee import TestCase4EditCommittee
-from t5_1_create_assessment_result import TestCase5CreateAssessmentResult
-from t5_2_edit_assessment_result import TestCase5EditAssessmentResult
 from t6_IQA_menu import TestCase6IQAMenu
 from t7_faculty_menu import TestCase7FacultyMenu
-from t8_1_create_faculty_study_program import TestCase8CreateFacultyStudyProgram
-from t8_2_edit_faculty_study_program import TestCase8EditFacultyStudyProgram
-from t9_1_create_committee_appointment import TestCase9CreateCommitteeAppointment
-from t9_2_temp_show_assessment_conflict import TestCase9DEMPShowConflict
-from t9_3_edit_committee_appointment import TestCase9EditCommitteeAppointment
-from t10_temp_show_assessment_calendar import UTestCase10ShowAssessmentCalendar
-from t11_1_inbox import VTestCase11AdminInbox
-from t11_2_inbox import WTestCase11EngineerInbox
-from t11_3_inbox import XTestCase11ICInbox
-from t11_4_inbox import YTestCase11ReplyInboxAdmin
-
-
-
-
 
 if __name__ == "__main__":
     unittest.main()
