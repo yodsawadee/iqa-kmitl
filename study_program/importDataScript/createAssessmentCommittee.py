@@ -1,7 +1,10 @@
 from study_program.models import AssessmentResult, Professor, StudyProgram, Committee
 import xlrd
+import os
 
-workbook = xlrd.open_workbook('/iqa-kmitl/study_program/importDataScript/data/Revisedv2 Database_ [Assessors Matching & Assesment Scheduling_ An Application for IQA System].xlsx')
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+path = os.path.join(BASE_DIR, '/study_program/importDataScript/data/Revisedv2 Database_ [Assessors Matching & Assesment Scheduling_ An Application for IQA System].xlsx')
+workbook = xlrd.open_workbook(path)
 worksheet = workbook.sheet_by_name('Committee-AssessmentResult (เชื')
 
 #shell()
