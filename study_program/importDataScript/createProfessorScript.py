@@ -3,7 +3,7 @@ import xlrd
 from study_program.models import Professor
 
 
-workbook = xlrd.open_workbook('C:/iqa_website_test/IQA-Website-for-KMITL-master/myvenv/Scripts/iqa_web/study_program/importDataScript/data/study_program.xlsx')
+workbook = xlrd.open_workbook('/iqa-kmitl/study_program/importDataScript/data/study_program.xlsx')
 worksheet = workbook.sheet_by_name('professor')
 
 #shell()

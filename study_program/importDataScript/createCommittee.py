@@ -5,7 +5,7 @@ from study_program.models import StudyProgram
 from study_program.models import Committee
 
 
-workbook = xlrd.open_workbook('C:/iqa_website_test/IQA-Website-for-KMITL-master/myvenv/Scripts/iqa_web/study_program/importDataScript/data/Revisedv2 Database_ [Assessors Matching & Assesment Scheduling_ An Application for IQA System].xlsx')
+workbook = xlrd.open_workbook('/iqa-kmitl/study_program/importDataScript/data/Revisedv2 Database_ [Assessors Matching & Assesment Scheduling_ An Application for IQA System].xlsx')
 worksheet = workbook.sheet_by_name('CommitteeList (รายชื่อกรรมการปร')
 
 #shell()

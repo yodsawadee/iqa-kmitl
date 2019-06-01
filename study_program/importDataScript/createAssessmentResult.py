@@ -1,7 +1,7 @@
 from study_program.models import AssessmentResult, Professor, StudyProgram
 import xlrd
 
-workbook = xlrd.open_workbook('C:/iqa_website_test/IQA-Website-for-KMITL-master/myvenv/Scripts/iqa_web/study_program/importDataScript/data/Revisedv2 Database_ [Assessors Matching & Assesment Scheduling_ An Application for IQA System].xlsx')
+workbook = xlrd.open_workbook('/iqa-kmitl/study_program/importDataScript/data/Revisedv2 Database_ [Assessors Matching & Assesment Scheduling_ An Application for IQA System].xlsx')
 worksheet = workbook.sheet_by_name('AssessmentResult (ผลการประเมิน)')
 
 #shell()
