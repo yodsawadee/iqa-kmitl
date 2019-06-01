@@ -12,6 +12,7 @@ import unittest, time, re
 
 class TestCase2FilterStudyProgram(unittest.TestCase):
     def setUp(self):
+        print()
         chromedriver = "./chromedriver"
         self.driver = webdriver.Chrome(chromedriver)
         self.driver.implicitly_wait(30)

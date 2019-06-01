@@ -9,30 +9,30 @@ import datetime
 class Professor(models.Model):
     id = models.AutoField(primary_key=True)
     name_surname = models.CharField(max_length = 200)
-    professor_id = models.CharField(max_length = 200,blank=True)
+    professor_id = models.CharField(max_length = 200)
     academic_title = models.CharField(max_length = 200)
-    date_of_birth = models.DateField()
+    date_of_birth = models.DateField( null=True, blank=True)
 
     YEAR_CHOICES = []
     for r in range(2550, (datetime.datetime.now().year+1+543)):
         YEAR_CHOICES.append((r,r))
 
-    bsc = models.CharField(max_length = 200)
-    bsc_grad_institute = models.CharField(max_length = 200)
+    bsc = models.CharField(max_length = 200, blank=True)
+    bsc_grad_institute = models.CharField(max_length = 200, blank=True)
     bsc_year = models.IntegerField(('year'), choices=YEAR_CHOICES, default=datetime.datetime.now().year)
     #https://groups.google.com/forum/#!msg/django-users/al95x1TXFV4/7mCCWQE3jtAJ
     
-    msc = models.CharField(max_length = 200)
-    msc_grad_institute = models.CharField(max_length = 200)
+    msc = models.CharField(max_length = 200, blank=True)
+    msc_grad_institute = models.CharField(max_length = 200, blank=True)
     msc_year = models.IntegerField(('year'), choices=YEAR_CHOICES, default=datetime.datetime.now().year)
 
-    phd = models.CharField(max_length = 200)
-    phd_grad_institute = models.CharField(max_length = 200)
+    phd = models.CharField(max_length = 200, blank=True)
+    phd_grad_institute = models.CharField(max_length = 200, blank=True)
     phd_year = models.IntegerField(('year'), choices=YEAR_CHOICES, default=datetime.datetime.now().year)
     
-    phone = models.CharField(max_length = 200)
-    email = models.CharField(max_length = 200)
-    university = models.CharField(max_length = 200)
+    phone = models.CharField(max_length = 200, blank=True)
+    email = models.CharField(max_length = 200, blank=True)
+    university = models.CharField(max_length = 200, blank=True)
     additional_degree = models.CharField(max_length = 200, blank = True)
 
     responsible_program = models.ManyToManyField('StudyProgram', blank=True)
@@ -69,7 +69,7 @@ class StudyProgram(models.Model):
     responsible_professors = models.ManyToManyField(Professor, through=Professor.responsible_program.through, blank=True)
     #past_assessment = models.ManyToManyField('AssessmentResult', blank=True)
     def __str__(self):
-        return self.name
+        return str(self.code)+ ": " + str(self.name)
 
 
 

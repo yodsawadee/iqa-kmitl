@@ -9,6 +9,8 @@ import unittest, time, re
 
 class TestCase7FacultyMenu(unittest.TestCase):
     def setUp(self):
+        print()
+        print("test case 7: faculty menu ")
         chromedriver = "./chromedriver"
         self.driver = webdriver.Chrome(chromedriver)
         self.driver.implicitly_wait(30)

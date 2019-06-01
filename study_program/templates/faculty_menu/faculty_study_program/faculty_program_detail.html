@@ -3,10 +3,24 @@
 {% block content %}
 
 <div class="container">
-
+    <br />
+    <a href="{% url 'main_menu' %}">home</a>
+    <i id="long-arrow-alt-right" class="fas fa-long-arrow-alt-right"></i>
+    <a href="{% url 'faculty_menu' %}">faculty menu</a>
+    <i id="long-arrow-alt-right" class="fas fa-long-arrow-alt-right"></i>
+    <a href="{% url 'all_faculty_program' %}">faculty study program</a>
+    <i id="long-arrow-alt-right" class="fas fa-long-arrow-alt-right"></i>
+    {{ program_detail.name }}
+   
     <br />
     <br />
-
+    <!-- create from message -->
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{message.tags}}">{{message}}</div>        
+        {% endfor %}
+    {% endif %}
+    
     <div id="facultyStudyProgram-container2" class="container">
         <br />
         <div class="col">
@@ -17,7 +31,7 @@
                 </div>
                 <!-- EDIT -->
                 <div class="ml-auto">
-                    <form method="GET" action="{% url 'edit_study_program' program_id %}">
+                    <form method="GET" action="{% url 'edit_faculty_study_program' program_id %}">
                         <button id="facultyStudyProgram-btn" type="submit" class="btn btn-outline-success mr-2">Edit Program</button>
                     </form>
                 </div>
