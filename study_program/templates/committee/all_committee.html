@@ -5,25 +5,31 @@
 <div class="container">
 
     <br />
-    <a href="{% url 'main_menu' %}">home</a>&emsp;
-    <i id="long-arrow-alt-right" class="fas fa-long-arrow-alt-right"></i>&emsp;
-    <a href="{% url 'assessment_menu' %}">assessment menu</a>&emsp;
-    <i id="long-arrow-alt-right" class="fas fa-long-arrow-alt-right"></i>&emsp;
+    <a href="{% url 'main_menu' %}">home</a> 
+    <i id="long-arrow-alt-right" class="fas fa-long-arrow-alt-right"></i> 
+    <a href="{% url 'assessment_menu' %}">assessment menu</a> 
+    <i id="long-arrow-alt-right" class="fas fa-long-arrow-alt-right"></i>
     all committee
     <br /><br />
+    <!-- create from message -->
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{message.tags}}">{{message}}</div>        
+        {% endfor %}
+    {% endif %}
     <!-- COMMITTEE LIST HEADER -->
     <div id="all_committee-container" class="container">
         <br />
         <div class="col">
             <div class="row">
                 {% if request.user.is_superuser %}
-                <div class="col-md-6">
+                <div class="col-md-8 mr-4">
                     <h1 style="color: white;">Committee List</h1>
                 </div>
 
                 <div class="ml-auto">
                     <form method="GET" action="{% url 'export_committee_csv' %}">
-                        <button id="committee-btn" type="submit" class="btn btn-outline-success mr-4">Export CSV</button>
+                        <button id="committee-btn" type="submit" class="btn btn-outline-success mr-4 ml-4">Export CSV</button>
                     </form>
                 </div>
 
@@ -32,15 +38,13 @@
                     <button id="committee-btn" type="submit" class="btn btn-outline-success mr-4">Add Committee</button>
                 </form>
                 {% else %}
-                <div class="col-md-6">
+                <div class="col-md-10 mr-4">
                     <h1 style="color: white;">Committee List</h1>
                 </div>
 
-                <div class="ml-auto">
-                    <form method="GET" action="{% url 'export_committee_csv' %}">
-                        <button id="committee-btn" type="submit" class="btn btn-outline-success mr-4">Export CSV</button>
-                    </form>
-                </div>
+                <form method="GET" action="{% url 'export_committee_csv' %}">
+                    <button id="committee-btn" type="submit" class="btn btn-outline-success ml-4">Export CSV</button>
+                </form>
                 {% endif %}
             </div>
         </div>

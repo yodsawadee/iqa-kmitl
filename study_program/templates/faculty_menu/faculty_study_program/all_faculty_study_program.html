@@ -4,6 +4,13 @@
 
 <div class="container">
     <br />
+    <a href="{% url 'main_menu' %}">home</a>
+    <i id="long-arrow-alt-right" class="fas fa-long-arrow-alt-right"></i>
+    <a href="{% url 'faculty_menu' %}">faculty menu</a>
+    <i id="long-arrow-alt-right" class="fas fa-long-arrow-alt-right"></i>
+    faculty study program
+
+    <br />
     <br />
  
     <!-- create from message -->
@@ -44,6 +51,38 @@
     <nav id="facultyStudyProgram-container2" class="navbar navbar-expand-lg">
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <form class="form-inline mr-auto" action="{% url 'all_faculty_program' %}" method="get">
+                <select name="faculty">
+                    <option value="-">คณะ</option>
+                    {% for key, value in faculties.items %}
+                        <option value={{key}}>{{ value }}</option>
+                    {% endfor %}
+                </select>
+                
+                <select name="degree">
+                    <option value="-">ระดับปริญญา</option>
+                    {% for key, value in degree.items %}
+                        <option value={{key}}>{{ value }}</option>
+                    {% endfor %}
+                </select>
+
+                <select name="type1">
+                    <option value="-">หลักสูตร</option>
+                    {% for key, value in type1.items %}
+                        <option value={{key}}>{{ value }}</option>
+                    {% endfor %}
+                </select>
+
+                <select name="type2">
+                    <option value="-">หลักสูตร(ภาษา)</option>
+                    {% for key, value in type2.items %}
+                        <option value={{key}}>{{ value }}</option>
+                    {% endfor %}
+                </select>
+
+                &emsp;
+                <input style="color:white;background-color:#4CCEDC;  border-radius: 3px; border: solid 2px white;" type="submit">
+            </form>
 
             <div class="ml-auto mr-3">
                 <form class="form-inline my-2 my-lg-0" action="{% url 'all_faculty_program' current_page %}" method="get">

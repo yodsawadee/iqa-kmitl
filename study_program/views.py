@@ -260,7 +260,7 @@ def committee_recommendation(request, page_number = 1):
 
 # ASSESSMENT CALENDAR
 @login_required(login_url="/login")
-def assessment_calendar(request, month = datetime.datetime.today().month, year = datetime.datetime.today().year):
+def assessment_calendar(request, month = datetime.datetime.today().month, year = datetime.datetime.today().year + 543):
     today = datetime.datetime.today()
 
     date_name = list(calendar.day_abbr)
@@ -268,7 +268,7 @@ def assessment_calendar(request, month = datetime.datetime.today().month, year =
     day_in_month = calendar.monthcalendar(year, month)
     print("DATEM: ", day_in_month)
 
-    
+    current_date = str(datetime.datetime.now())[8:10]
     if(month == 12):
         next_month = 1
         next_year = year + 1
@@ -342,7 +342,7 @@ def assessment_calendar(request, month = datetime.datetime.today().month, year =
 
     context = {'date_name':date_name,'day_in_month':day_in_month,'month':month , 'month_name':month_name, 'next_month':next_month,'prev_month':prev_month, 
                 'year':year, 'next_year':next_year,'prev_year':prev_year, 'have_appointment_in_afternoon_list':have_appointment_in_afternoon_list,
-                'have_appointment_in_morning_list':have_appointment_in_morning_list, 'conflict_date_list':conflict_date_list, 'is_conflict':is_conflict }
+                'have_appointment_in_morning_list':have_appointment_in_morning_list, 'conflict_date_list':conflict_date_list, 'is_conflict':is_conflict, 'current_date':current_date }
 
          
     return render(request, 'iqa_menu/assessment_calendar/assessment_calendar.html', context)
@@ -517,6 +517,7 @@ def all_faculty_program(request, page_number = 1):
         'AAI':'AAI: วิทยาลัยอุตสาหกรรมการบินนานาชาติ', 
         'ADM':'ADM: คณะบริหารและจัดการ', 
         'AGI':'AGI: คณะอุตสาหกรรมเกษตร', 
+        'AGT':'AGT: คณะเทคโนโลยีการเกษตร',
         'AMI':'AMI: คณะเทคโนโลยีการเกษตร', 
         'ARC':'ARC: วิทยาลัยนวัตกรรมการผลิตขั้นสูง', 
         'CHP':'CHP: คณะสถาปัตยกรรมศาสตร์', 
@@ -538,6 +539,16 @@ def all_faculty_program(request, page_number = 1):
         'D':'ปริญญาเอก',
     }
 
+    type1_list = {
+        'M':'หลักสูตรปรับปรุง',
+        'N':'หลักสูตรใหม่',
+    }
+
+    type2_list = {
+        'I':'นานาชาติ',
+        'T':'ไทย',
+    }
+
     study_program_list = StudyProgram.objects.all().order_by('id')
 
     # Get all program relating to that faculty
@@ -552,6 +563,60 @@ def all_faculty_program(request, page_number = 1):
     # check searching program
     program_list = []
 
+    
+
+    # filtering faculties
+    faculty = request.GET.get('faculty')
+    if(faculty != "-" and faculty != None):
+        faculty = faculty[0:3]
+        faculty = faculty.upper()
+    
+        temp_study_list = []
+        for item in study_program_list:
+            if(len(item.code) < 12):
+                continue
+            if(item.code[0:3] == faculty):
+                temp_study_list.append(item)
+        
+        study_program_list = temp_study_list
+    # done
+
+    # filtering degree
+    degree = request.GET.get('degree')
+    if(degree != "-" and degree != None ):
+        
+        temp_list = []
+        for item in study_program_list:
+            if(item.code[len(item.code)-3] == degree):
+                temp_list.append(item)
+
+        study_program_list = temp_list
+    # done
+
+    # filter type1
+    type1 = request.GET.get('type1')
+    print("TYPE1:", type1)
+    if(type1 != "-" and type1 != None ):
+        temp_list = []
+        for item in study_program_list:
+            if(item.code[len(item.code)-2] == type1):
+                temp_list.append(item)
+
+        study_program_list = temp_list
+    # done
+
+    # filter type2
+    type2 = request.GET.get('type2')
+    if(type2 != "-" and type2 != None):
+        temp_list = []
+        for item in study_program_list:
+            if(item.code[len(item.code)-1] == type2):
+                temp_list.append(item)
+
+        study_program_list = temp_list
+    # done
+
+    program_list = []
     faculty_search = request.GET.get('faculty_name')
     if(faculty_search != None):
         #print(faculty_search)
@@ -591,7 +656,7 @@ def all_faculty_program(request, page_number = 1):
     if(next_page > math.ceil(total_program/10)):
         next_page = current_page
 
-    context = {'studyPrograms':studyPrograms, 'faculties_list':faculties_list, 'degree_list':degree_list,
+    context = {'studyPrograms':studyPrograms, 'faculties':faculties_list, 'degree':degree_list, 'type1':type1_list, 'type2':type2_list,
                'next_page':next_page, 'current_page':current_page, 'prev_page':prev_page }
 
 
@@ -651,6 +716,7 @@ def all_programs(request, page_number = 1, faculty = "-"):
         'AAI':'AAI: วิทยาลัยอุตสาหกรรมการบินนานาชาติ', 
         'ADM':'ADM: คณะบริหารและจัดการ', 
         'AGI':'AGI: คณะอุตสาหกรรมเกษตร', 
+        'AGT':'AGT: คณะเทคโนโลยีการเกษตร',
         'AMI':'AMI: คณะเทคโนโลยีการเกษตร', 
         'ARC':'ARC: วิทยาลัยนวัตกรรมการผลิตขั้นสูง', 
         'CHP':'CHP: คณะสถาปัตยกรรมศาสตร์', 
@@ -671,6 +737,16 @@ def all_programs(request, page_number = 1, faculty = "-"):
         'M':'ปริญญาโท',
         'D':'ปริญญาเอก',
     }
+
+    type1_list = {
+        'M':'หลักสูตรปรับปรุง',
+        'N':'หลักสูตรใหม่',
+    }
+
+    type2_list = {
+        'I':'นานาชาติ',
+        'T':'ไทย',
+    }
     # degree_list = {'b':'Bachelor', 'm':'Master', 'd':'Doctor'}
 
     # # status_list = {}
@@ -687,12 +763,15 @@ def all_programs(request, page_number = 1, faculty = "-"):
     page = request.GET.get('page')
     
     # filtering faculties
-    if(faculty != "-"):
+    faculty = request.GET.get('faculty')
+    if(faculty != "-" and faculty != None):
         faculty = faculty[0:3]
         faculty = faculty.upper()
     
         temp_study_list = []
         for item in studyProgram_list:
+            if(len(item.code) < 12):
+                continue
             if(item.code[0:3] == faculty):
                 temp_study_list.append(item)
         
@@ -700,14 +779,39 @@ def all_programs(request, page_number = 1, faculty = "-"):
     # done
 
     # filtering degree
-    degree = "-"
-    if(degree != "-"):
-        temp_study_list = []
+    degree = request.GET.get('degree')
+    if(degree != "-" and degree != None ):
+        
+        temp_list = []
         for item in studyProgram_list:
-            if(item.code[10] == degree):
-                temp_study_list.append(item) 
-        studyProgram_list = temp_study_list
+            if(item.code[len(item.code)-3] == degree):
+                temp_list.append(item)
+
+        studyProgram_list = temp_list
     # done
+
+    # filter type1
+    type1 = request.GET.get('type1')
+    if(type1 != "-" and type1 != None ):
+        temp_list = []
+        for item in studyProgram_list:
+            if(item.code[len(item.code)-2] == type1):
+                temp_list.append(item)
+
+        studyProgram_list = temp_list
+    # done
+
+    # filter type2
+    type2 = request.GET.get('type2')
+    if(type2 != "-" and type2 != None):
+        temp_list = []
+        for item in studyProgram_list:
+            if(item.code[len(item.code)-1] == type2):
+                temp_list.append(item)
+
+        studyProgram_list = temp_list
+    # done
+
 
     # check searching program
     program_list = []
@@ -758,15 +862,21 @@ def all_programs(request, page_number = 1, faculty = "-"):
         next_page = current_page
 
     
-    return render(request, 'study_program/all_program.html', {
+    context = {
         'studyPrograms': studyPrograms,
         'faculties':faculties_list,
         'degree': degree_list,
+        'type1':type1_list,
+        'type2':type2_list,
         # 'programs': program_list, 
         'current_page': current_page, 
         'prev_page': prev_page, 
         'next_page': next_page
-        })
+        
+    }
+
+    return render(request, 'study_program/all_program.html', context)
+    # return redirect('all_program', context)
 
     # if(found == True):
     #     prev_page = 1
@@ -951,6 +1061,7 @@ def all_assessments(request, page_number=1, faculty = "-"):
         'AAI':'AAI: วิทยาลัยอุตสาหกรรมการบินนานาชาติ', 
         'ADM':'ADM: คณะบริหารและจัดการ', 
         'AGI':'AGI: คณะอุตสาหกรรมเกษตร', 
+        'AGT':'AGT: คณะเทคโนโลยีการเกษตร',
         'AMI':'AMI: คณะเทคโนโลยีการเกษตร', 
         'ARC':'ARC: วิทยาลัยนวัตกรรมการผลิตขั้นสูง', 
         'CHP':'CHP: คณะสถาปัตยกรรมศาสตร์', 
@@ -964,7 +1075,43 @@ def all_assessments(request, page_number=1, faculty = "-"):
         'MSE':'MSE: วิทยาลัยสังคีต', 
         'NNT':'NNT: วิทยาลัยนาโนเทคโนโลยี', 
         'SCI':'SCI: คณะวิทยาศาสตร์', 
-        }   
+        }    
+
+    faculties_list = {
+        'AAI':'AAI: วิทยาลัยอุตสาหกรรมการบินนานาชาติ', 
+        'ADM':'ADM: คณะบริหารและจัดการ', 
+        'AGI':'AGI: คณะอุตสาหกรรมเกษตร', 
+        'AGT':'AGT: คณะเทคโนโลยีการเกษตร',
+        'AMI':'AMI: คณะเทคโนโลยีการเกษตร', 
+        'ARC':'ARC: วิทยาลัยนวัตกรรมการผลิตขั้นสูง', 
+        'CHP':'CHP: คณะสถาปัตยกรรมศาสตร์', 
+        'EIR':'EIR: วิทยาเขตชุมพรเขตรอุดมศักดิ์', 
+        'ENG':'ENG: คณะวิศวกรรมศาสตร์', 
+        'ICX':'ICX: วิทยาลัยนานาขาติ', 
+        'IDE':'IDE: คณะครุศาสตร์อุตสาหกรรมและเทคโนโลยี', 
+        'ITX':'ITX: คณะเทคโนโลยีสารสนเทศ', 
+        'LBA':'LBA: คณะศิลปศาสตร์', 
+        'MED':'MED: วิทยาลัยแพทยศาสตร์นานาชาติ', 
+        'MSE':'MSE: วิทยาลัยสังคีต', 
+        'NNT':'NNT: วิทยาลัยนาโนเทคโนโลยี', 
+        'SCI':'SCI: คณะวิทยาศาสตร์', 
+        }    
+
+    degree_list = {
+        'B':'ปริญญาตรี',
+        'M':'ปริญญาโท',
+        'D':'ปริญญาเอก',
+    }
+
+    type1_list = {
+        'M':'หลักสูตรปรับปรุง',
+        'N':'หลักสูตรใหม่',
+    }
+
+    type2_list = {
+        'I':'นานาชาติ',
+        'T':'ไทย',
+    }
 
     from_item = (page_number * 10) - 10
     to_item = page_number * 10
@@ -976,17 +1123,55 @@ def all_assessments(request, page_number=1, faculty = "-"):
     ########################################################################
     assessment_list = AssessmentResult.objects.all().order_by('year').reverse()
 
+
     # filtering faculties
-    if(faculty != "-"):
+    faculty = request.GET.get('faculty')
+    if(faculty != "-" and faculty != None):
         faculty = faculty[0:3]
         faculty = faculty.upper()
     
         temp_study_list = []
         for item in assessment_list:
+            if(len(item.code) < 12):
+                continue
             if(item.code[0:3] == faculty):
                 temp_study_list.append(item)
         
         assessment_list = temp_study_list
+    # done
+
+    # filtering degree
+    degree = request.GET.get('degree')
+    if(degree != "-" and degree != None ):
+        
+        temp_list = []
+        for item in assessment_list:
+            if(item.code[len(item.code)-5] == degree):
+                temp_list.append(item)
+
+        assessment_list = temp_list
+    # done
+
+    # filter type1
+    type1 = request.GET.get('type1')
+    if(type1 != "-" and type1 != None ):
+        temp_list = []
+        for item in assessment_list:
+            if(item.code[len(item.code)-4] == type1):
+                temp_list.append(item)
+
+        assessment_list = temp_list
+    # done
+
+    # filter type2
+    type2 = request.GET.get('type2')
+    if(type2 != "-" and type2 != None):
+        temp_list = []
+        for item in assessment_list:
+            if(item.code[len(item.code)-3] == type2):
+                temp_list.append(item)
+
+        assessment_list = temp_list
     # done
 
     # check searching program
@@ -1049,6 +1234,9 @@ def all_assessments(request, page_number=1, faculty = "-"):
         'assessments': assessments,
         # 'assessments': assessment_list, 
         'faculties':faculties_list,
+        'degree': degree_list,
+        'type1': type1_list,
+        'type2': type2_list,
         'current_page': current_page, 
         'prev_page': prev_page, 
         'next_page':next_page})
@@ -1176,12 +1364,18 @@ def committee_profile(request, committee_id):
 def create_study_program(request):
     form = StudyProgramForm(request.POST or None, files = request.FILES or None)
     if form.is_valid():
-        #print("kao if")
-        form.save()
-        #print("save leaw")
-        form = StudyProgramForm()
-        messages.success(request, "Create form success!!")
-        return redirect('all_program')
+        try:
+            s = StudyProgram.objects.get(code=str(form['code'].data))
+            print("KAO AI NEE WEI")
+            messages.warning(request, "This study program already existed!!")
+            return redirect('all_program')
+        except:
+            #print("kao if")
+            form.save()
+            #print("save leaw")
+            form = StudyProgramForm()
+            messages.success(request, "Create Study Program success!!")
+            return redirect('all_program')
 
     context = { 'form': form }
     return render(request, "study_program/create_study_program.html", context)
@@ -1191,12 +1385,18 @@ def create_study_program(request):
 def create_faculty_program(request):
     form = StudyProgramForm(request.POST or None, files = request.FILES or None)
     if form.is_valid():
-        #print("kao if")
-        form.save()
-        #print("save leaw")
-        form = StudyProgramForm()
-        messages.success(request, 'Create form success!!')
-        return redirect('all_faculty_program')
+        try:
+            s = StudyProgram.objects.get(code=str(form['code'].data))
+            print("KAO AI NEE WEI")
+            messages.warning(request, "This study program already existed!!")
+            return redirect('all_faculty_program')
+        except: 
+            #print("kao if")
+            form.save()
+            #print("save leaw")
+            form = StudyProgramForm()
+            messages.success(request, 'Create Study Program success!!')
+            return redirect('all_faculty_program')
 
     context = { 'form': form }
     return render(request, "faculty_menu/faculty_study_program/faculty_create_study_program.html", context)
@@ -1206,23 +1406,37 @@ def create_faculty_program(request):
 @login_required(login_url="login")
 def create_professor(request):
     form = ProfessorForm(request.POST or None, files = request.FILES or None)
+    
     if form.is_valid():
-        form.save()
-        form = ProfessorForm()
-        return redirect('all_professor')
+        try:
+            p = Professor.objects.get(professor_id=str(form['professor_id'].data))
+            messages.warning(request, "This Professor already existed!!")
+            return redirect('all_professor')
+        except:
+            form.save()
+            form = ProfessorForm()
+            messages.success(request, 'Create Professor success!!')
+            return redirect('all_professor')
 
     context = { 'form': form }
     return render(request, "professor/create_professor.html", context)
 
 
+# Haven't use anywhere
 @user_passes_test(lambda u: u.is_superuser, login_url='all_program')
 @login_required(login_url="login")
 def create_professor_fromStudyProgram(request, program_id):
     form = ProfessorForm(request.POST or None, files = request.FILES or None)
     if form.is_valid():
-        form.save()
-        form = ProfessorForm()
-        return redirect('program_detail', program_id = program_id)
+        try:
+            p = Professor.objects.get(professor_id=str(form['professor_id'].data))
+            messages.warning(request, "This Professor already existed!!")
+            return redirect('program_detail', program_id = program_id)
+        except:
+            form.save()
+            form = ProfessorForm()
+            messages.success(request, 'Create Professor success!!')
+            return redirect('program_detail', program_id = program_id)
 
     context = { 'form': form }
     return render(request, "professor/create_professor.html", context)
@@ -1234,9 +1448,15 @@ def create_professor_fromStudyProgram(request, program_id):
 def create_committee(request):
     form = CommitteeForm(request.POST or None, files = request.FILES or None)
     if form.is_valid():
-        form.save()
-        form = CommitteeForm()
-        return redirect('all_committee')
+        try:
+            c = Committee.objects.get(code=str(form['code'].data))
+            messages.warning(request, "This committee already existed!!")
+            return redirect('all_committee')
+        except:
+            form.save()
+            form = CommitteeForm()
+            messages.success(request, "Create Committee success!!")
+            return redirect('all_committee')
 
     context = { 'form': form }
     return render(request, "committee/create_committee.html", context)
@@ -1248,9 +1468,14 @@ def create_committee(request):
 def create_assessment_result(request):
     form = AssessmentResultForm(request.POST or None, files = request.FILES or None)
     if form.is_valid():
-        form.save()
-        form = AssessmentResultForm()
-        return redirect('create_aun')
+        try:
+            asr = AssessmentResult.objects.get(code=str(form['code'].data))
+            messages.warning(request, "This Assessment Result already existed!!")
+            return redirect('all_assessment')
+        except:
+            form.save()
+            form = AssessmentResultForm()
+            return redirect('create_aun')
 
     context = { 'form': form }
     return render(request, "assessment/create_assessment_result.html", context)
@@ -1261,9 +1486,15 @@ def create_assessment_result(request):
 def create_aun_result(request):
     form = AunForm(request.POST or None, files = request.FILES or None)
     if form.is_valid():
-        form.save()
-        form = AunForm()
-        return redirect('all_assessment')
+        try:
+            aun = AUN.objects.get(code=str(form['code'].data))
+            messages.warning(request, "This AUN Result already existed!!")
+            return redirect('all_assessment')
+        except:
+            form.save()
+            form = AunForm()
+            messages.success(request, "Create Assessment Result & AUN success!!")
+            return redirect('all_assessment')
 
     context = { 'form': form }
     return render(request, "assessment/create_aun.html", context)
@@ -1282,10 +1513,21 @@ def edit_study_program(request, program_id):
         #form = StudyProgramForm(request.POST, request.FILES, instance=study_program)
         form = StudyProgramForm(data = request.POST, files = request.FILES, instance=study_program)
         if form.is_valid():
-            form.save()
-            #ini_obj = form.save(commit=False)
-            #ini_obj.save()
-            return redirect('program_detail', program_id = program_id)
+            try:
+                a = StudyProgram.objects.get(pk=program_id)
+                #print("COMPARING: ",str(form['code'].data),str(a.code))
+                if(str(form['code'].data) != str(a.code)):
+                    s = StudyProgram.objects.get(code=str(form['code'].data))
+                    messages.warning(request, "This Study Program already existed!!")
+                    return redirect('program_detail', program_id = program_id)
+                else:
+                    s = StudyProgram.objects.get(code="ITSgoNNaBBomBForSureHaHA555HA!ha")
+            except:
+                form.save()
+                #ini_obj = form.save(commit=False)
+                #ini_obj.save()
+                messages.success(request, "Edit Study Program success!!")
+                return redirect('program_detail', program_id = program_id)
 
     else:
         form = StudyProgramForm(instance=study_program)
@@ -1296,6 +1538,43 @@ def edit_study_program(request, program_id):
     return render(request, "study_program/edit_study_program.html", context)
 
 
+
+
+
+#@user_passes_test(lambda u: u.is_superuser, login_url='all_program')
+@login_required(login_url="login")
+def edit_faculty_study_program(request, program_id):
+    study_program = get_object_or_404(StudyProgram, pk=program_id)
+    if request.method == "POST":
+        #form = StudyProgramForm(request.POST, request.FILES, instance=study_program)
+        form = StudyProgramForm(data = request.POST, files = request.FILES, instance=study_program)
+        if form.is_valid():
+            try:
+                a = StudyProgram.objects.get(pk=program_id)
+                #print("COMPARING: ",str(form['code'].data),str(a.code))
+                if(str(form['code'].data) != str(a.code)):
+                    s = StudyProgram.objects.get(code=str(form['code'].data))
+                    messages.warning(request, "This Study Program already existed!!")
+                    return redirect('faculty_program_detail', program_id = program_id)
+                else:
+                    s = StudyProgram.objects.get(code="ITSgoNNaBBomBForSureHaHA555HA!ha")
+            except:
+                form.save()
+                #ini_obj = form.save(commit=False)
+                #ini_obj.save()
+                messages.success(request, "Edit Study Program success!!")
+                return redirect('faculty_program_detail', program_id = program_id)
+
+    else:
+        form = StudyProgramForm(instance=study_program)
+
+    context = {
+        'form':form
+    }
+    return render(request, "faculty_menu/faculty_study_program/edit_faculty_study_program.html", context)
+
+
+
 @user_passes_test(lambda u: u.is_superuser, login_url='all_program')
 @login_required(login_url="login")
 def edit_professor_profile(request, professor_id):
@@ -1303,8 +1582,19 @@ def edit_professor_profile(request, professor_id):
     if request.method == "POST":
         form = ProfessorForm(request.POST, instance=professor)
         if form.is_valid():
-            form.save()
-            return redirect('professor_profile', professor_id = professor_id)
+            try:
+                a = Professor.objects.get(pk = professor_id)
+                print("COMPARING:", form['professor_id'].data, a.professor_id)
+                if(str(form['professor_id'].data) != str(a.professor_id)):
+                    p = Professor.objects.get(professor_id=str(form['professor_id'].data))
+                    messages.warning(request, "This Professor already existed!!")
+                    return redirect('professor_profile', professor_id = professor_id)
+                else:
+                    p = Professor.objects.get(professor_id="ITSgoNNaBBomBForSureHaHA555HA!ha")
+            except:     
+                form.save()
+                messages.success(request, "Edit Professor success!!")
+                return redirect('professor_profile', professor_id = professor_id)
 
     else:
         form = ProfessorForm(instance=professor)
@@ -1322,8 +1612,19 @@ def edit_assessment_result(request, assessment_id):
     if request.method == "POST":
         form = AssessmentResultForm(request.POST, instance=assessment)
         if form.is_valid():
-            form.save()
-            return redirect('assessment_result', assessment_id = assessment_id)
+            try:
+                a = AssessmentResult.objects.get(pk = assessment_id)
+                print("COMPARING:", form['code'].data, a.code)
+                if(str(form['code'].data) != str(a.code)):
+                    asr = AssessmentResult.objects.get(code=str(form['code'].data))
+                    messages.warning(request, "This Assessment Result already existed!!")
+                    return redirect('assessment_result', assessment_id = assessment_id)
+                else:
+                    asr = AssessmentResult.objects.get(code="ITSgoNNaBBomBForSureHaHA555HA")
+            except:
+                form.save()
+                messages.success(request, "Edit Assessment Result success!!")
+                return redirect('assessment_result', assessment_id = assessment_id)
 
     else:
         form = AssessmentResultForm(instance=assessment)
@@ -1340,8 +1641,18 @@ def edit_aun(request, aun_id):
     if request.method == "POST":
         form = AunForm(request.POST, instance=aun)
         if form.is_valid():
-            form.save()
-            return redirect('assessment_result', assessment_id = aun_id)
+            try:
+                a = AUN.objects.get(pk = aun_id)
+                if(str(form['assessment_id'].data) != str(a.assessment_id)):
+                    aun = AUN.objects.get(code=str(form['assessment_id'].data))
+                    messages.warning(request, "This AUN Result already existed!!")
+                    return redirect('assessment_result', assessment_id = aun_id)
+                else:
+                    aun = AUN.objects.get(assessment_id="ITSgoNNaBBomBForSureHaHA555HA")
+            except:
+                form.save()
+                messages.success(request, "Edit AUN Result success!!")
+                return redirect('assessment_result', assessment_id = aun_id)
 
     else:
         form = AunForm(instance=aun)
@@ -1358,8 +1669,18 @@ def edit_committee_profile(request, committee_id):
     if request.method == "POST":
         form = CommitteeForm(request.POST, instance=committee)
         if form.is_valid():
-            form.save()
-            return redirect('committee_profile', committee_id = committee_id)
+            try:
+                a = Committee.objects.get(pk=committee_id)
+                if(str(form['code'].data) != str(a.code)):
+                    c = Committee.objects.get(code=str(form['code'].data))
+                    messages.warning(request, "This Committee already existed!!")
+                    return redirect('committee_profile', committee_id = committee_id)
+                else:
+                    c = Committee.objects.get(committee_id="ITSgoNNaBBomBForSureHaHA555HA")
+            except:
+                form.save()
+                messages.success(request, "Edit Committee Success!!")
+                return redirect('committee_profile', committee_id = committee_id)
 
     else:
         form = CommitteeForm(instance=committee)
@@ -1387,7 +1708,7 @@ def committee_appointment(request):
 
     for available_time in atObject:
         print(available_time.user)
-        if(available_time.user == request.user.username):
+        if(str(available_time.appointed_program.code)[0:3] == str(request.user.username).upper()):
             available_list.append(available_time)
     
     print("AVAILABLE TIME:",available_list)
@@ -1454,7 +1775,8 @@ def create_committee_appointment(request):
     else:
         print("form INVALID")
     
-    form = AvailableTimeForm(initial={'appointment_date':str(datetime.datetime.now())[0:10],'user':user})
+    time_kub = str(int(str(datetime.datetime.now())[0:4]) + 543) + str(datetime.datetime.now())[4:10]
+    form = AvailableTimeForm(initial={'appointment_date':time_kub,'user':user})
     context = {'form': form }
     print("EWWW")
 
@@ -1694,7 +2016,7 @@ def issue_detail(request, issue_id):
 
     comment_list = []
     #print(detail.id)
-    for comment in Comment.objects.all():
+    for comment in Comment.objects.all().order_by('id'):
         if(comment.comment_for == str(detail.id)):
             comment_list.append(comment)
 
@@ -1768,3 +2090,6 @@ def edit_comment(request, issue_id, comment_id):
 
 #-------------------------------------------------------------------------------------------------------------#
 
+
+def faq(request):
+    return render(request, 'FAQ/faq.html')

@@ -12,6 +12,8 @@ import unittest, time, re
 
 class TestCase2EditStudyProgram(unittest.TestCase):
     def setUp(self):
+        print()
+        print("test case 2-2: other activities for study program ")
         chromedriver = "./chromedriver"
         self.driver = webdriver.Chrome(chromedriver)
         self.driver.implicitly_wait(30)

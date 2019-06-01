@@ -6,8 +6,8 @@
 
 <div class="container">
     <br />
-    <a href="{% url 'main_menu' %}">home</a>&emsp;
-    <i id="long-arrow-alt-right" class="fas fa-long-arrow-alt-right"></i>&emsp;
+    <a href="{% url 'main_menu' %}">home</a>
+    <i id="long-arrow-alt-right" class="fas fa-long-arrow-alt-right"></i>
     study program
     <br /><br />
     <!-- create from message -->
@@ -60,9 +60,10 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
 
 
-            <ul class="navbar-nav mr-auto">
+            <!--<ul class="navbar-nav mr-auto" method="get">-->
                 <!-- FILTER: Faculties -->
-                <li id="faculties-nav-dropdown" class="nav-item dropdown">
+
+                <!--<li id="faculties-nav-dropdown" class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" style="color: white;" href="#" id="navbarDropdown" role="button"
                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         คณะ
@@ -72,8 +73,40 @@
                             <a class="dropdown-item"href="{{key}}">{{ value }}</a>
                         {% endfor %}
                     </div>
-                </li>              
-            </ul>
+                </li>              -->
+            <!--</ul>-->
+
+            <form class="form-inline mr-auto" action="{% url 'all_program' %}" method="get">
+                <select name="faculty">
+                    <option value="-">คณะ</option>
+                    {% for key, value in faculties.items %}
+                        <option value={{key}}>{{ value }}</option>
+                    {% endfor %}
+                </select>
+                
+                <select name="degree">
+                    <option value="-">ระดับปริญญา</option>
+                    {% for key, value in degree.items %}
+                        <option value={{key}}>{{ value }}</option>
+                    {% endfor %}
+                </select>
+
+                <select name="type1">
+                    <option value="-">หลักสูตร</option>
+                    {% for key, value in type1.items %}
+                        <option value={{key}}>{{ value }}</option>
+                    {% endfor %}
+                </select>
+
+                <select name="type2">
+                    <option value="-">หลักสูตร(ภาษา)</option>
+                    {% for key, value in type2.items %}
+                        <option value={{key}}>{{ value }}</option>
+                    {% endfor %}
+                </select>
+                &emsp;
+                <input style="color:white;background-color:#4CCEDC;  border-radius: 3px; border: solid 2px white;" type="submit">
+            </form>
 
             <form class="form-inline my-2 my-lg-0" action="{% url 'all_program' current_page %}" method="get">
                 <!-- submit query -->
@@ -86,6 +119,9 @@
                 </div>
                 <!-- <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button> -->
             </form>
+
+            
+
         </div>
     </nav>
 
