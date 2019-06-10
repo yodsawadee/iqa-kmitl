@@ -20,8 +20,7 @@ for i in range(1, worksheet.nrows):
     a.responsible_program.add(b)
 
 
-
-    print("aee ok")
+    print("StudyProgram-Professor", i)
+##    print("aee ok")
     
-
 

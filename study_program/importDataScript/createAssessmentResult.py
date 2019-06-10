@@ -40,4 +40,5 @@ for i in range(2, worksheet.nrows):
 
 
     ar = AssessmentResult.objects.create(code = code, year = year, curriculum_status = curriculum_status, curriculum_status_year = curriculum_status_year, curriculum_standard = curriculum_standard, pdf_docs = pdf_docs, pdf_docs_link = pdf_docs_link, program_id_id = program_id_id)
-    print("aee ok")
+    print("AssessmentResult", i)
+##    print("aee ok")

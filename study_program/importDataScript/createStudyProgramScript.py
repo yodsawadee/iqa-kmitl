@@ -29,12 +29,19 @@ for i in range(2, worksheet.nrows):
         collaboration_with_other_institues = 'Collaborated program with other institutes'
 
     name = worksheet.row(i)[2].value
-    pdf_docs = 'study_program_details/computer-science-resume-example-computer-science-resume-sample-0-u_l994DYD.jpg'
+    # pdf_docs = 'study_program_details/computer-science-resume-example-computer-science-resume-sample-0-u_l994DYD.jpg'
+    pdf_docs = ''    
     pdf_docs_link = worksheet.row(i)[1].value
 
 
     st = StudyProgram.objects.create(code = code, program_status = program_status, name = name, collaboration_with_other_institues = collaboration_with_other_institues, degree_and_major = degree_and_major, pdf_docs = pdf_docs, pdf_docs_link = pdf_docs_link)
-    print("aee ok")
+
+    print("Program", i)
+##    print("aee ok")
+
+
+
+
 
 
 

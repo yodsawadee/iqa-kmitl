@@ -16,4 +16,5 @@ for i in range(2, worksheet.nrows):
     b = AssessmentResult.objects.get(code = assessment_code)
     b.committee_id.add(a)
 
-    print("aee ok")
+    print("Committee-AssessmentResult", i)
+##    print("aee ok")

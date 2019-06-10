@@ -52,4 +52,5 @@ for i in range(2, worksheet.nrows):
             assessment_id_id = assessment_id_id
         )
         already_create.append(assessment_id_id)
-        print("aee ok")
+        print("AUN", i)        
+##        print("aee ok")
