@@ -4,7 +4,7 @@ from study_program.models import Professor
 from study_program.models import StudyProgram
 
 
-workbook = xlrd.open_workbook('/iqa-kmitl/study_program/importDataScript/data/study_program.xlsx')
+workbook = xlrd.open_workbook('study_program/importDataScript/data/study_program.xlsx')
 worksheet = workbook.sheet_by_name('StudyProgram-Professor')
 
 #shell()

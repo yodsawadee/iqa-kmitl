@@ -62,16 +62,24 @@
                 <a id="nav-text" class="nav-link" href="{% url 'faculty_menu' %}"><nf>Faculty Menu</nf></a>
                 {% endif %}
             </li>
+        &nbsp;
+       
             
 
     </ul>
 
 
     <div class="navbar-nav ml-auto">
+         
+        
         <li class="nav-item active">
             <c class="nav-link">{{ user }}&emsp;</c>
         </li>
-
+        &emsp;&emsp;
+        <li class="nav-item">
+            <a id="nav-text" class="nav-link" href="{% url 'faq' %}"><nf>FAQ</nf></a>
+        </li>
+        &emsp;
         <li class="nav-item active">
             <a id="nav-text" class="nav-link" href="javascript:{document.getElementById('logout').submit()}">
                 <nf>Logout<i id="sign-out-alt" class="fas fa-sign-out-alt fa-lg"></i></nf>
