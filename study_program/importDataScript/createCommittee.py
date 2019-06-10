@@ -26,6 +26,6 @@ for i in range(2, worksheet.nrows):
         professor_id_id = 1
 
     c = Committee.objects.create(code = code, year = year, assessment_level = assessment_level, profession = profession, professor_id_id = professor_id_id)
-
     print("Committee", i)
-##    print("aee ok")
+
+

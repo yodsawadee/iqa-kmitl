@@ -17,4 +17,3 @@ for i in range(2, worksheet.nrows):
     a.assessment_programs.add(b)
 
     print("Committee-AssessmentResult", i)
-##        print("aee ok")
